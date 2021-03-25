@@ -1,10 +1,15 @@
-import Sender
+from Sender import *
 import test_cases
 
 
 if __name__ == '__main__':
 	print("Sending spoof emails based on test cases")
-	print (test_cases.test_list["attack1"]["mailfrom"].decode())
-	Sender.mail_sender(test_cases.test_list["attack1"])
+	
+	#Loop through all test cases
+	for x in test_cases.test_list:
+		print("keys: " + x)
+		print ("Victim's email address: " + test_cases.test_list[x]["rcptto"].decode())
+	newmail = MailSender()
+	newmail.set_parameter(test_cases.test_list["Normal1"])
+	newmail.mail_sender()
 
-	#Sender()
