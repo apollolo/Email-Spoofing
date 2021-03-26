@@ -8,7 +8,9 @@ Our project involves exploring ability to create spoofed emailed through the vul
 
 ## Background
 
-![Screenshot](pictures/Email flow.png) 
+<div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/tree/main/pictures/Email flow.png" align="center"></a>
+  
+  *Source: Composition Kills: A Case Study of Email Sender Authentication on https://www.usenix.org/system/files/sec20-chen-jianjun.pdf*</div>
 
 ## SMTP
 During a regular Email processing flow
