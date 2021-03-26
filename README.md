@@ -32,3 +32,15 @@ The architecture of DKIM is defined in [RFC 6376](https://tools.ietf.org/html/rf
 
 ### DMARC (Domain-based Message Authentication, Reporting and Conformance)
 DMARC is the last step of the authentication process and depends on the results from the previous two which is explained in [RFC7489](https://tools.ietf.org/html/rfc7489). The receiver will conduct alignment test of the domain in "from header" with domains in DKIM and SPF. It will query the domain in "from header" in the data message for DMARC record published by the sender. The sender will specify what to do with emails that failed SPF and DKIM, which the receiver will follow. This ensures that no other brand can pretend to be the sender, and if the receiver got an email that pretends to the be a company, the receiver will notify the company with information in DMARC record.  
+
+
+## Projct Progress
+- python script with automatic emailing functionality for testing purposes
+- SMTP server created with Digital Ocean with email funcitionality
+- test cases that are variants of known attacks 
+
+problems:
+-unable to connect to SMTP server from client side
+
+ongoing solution:
+- generating emails API that can be called so we can intergrate script with the serer
