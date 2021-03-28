@@ -1,5 +1,5 @@
 # Email Spoofing
-**Boston University EC700 Epoch1 Project:** 
+**Boston University EC700 Epoch2 Project:** 
 
 **Authors: Pujan Paudel and Apollo Lo**
 
