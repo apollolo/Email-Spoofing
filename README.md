@@ -37,10 +37,7 @@ DMARC is the last step of the authentication process and depends on the results 
 ## Projct Progress
 - python script with automatic emailing functionality for testing purposes
 - SMTP server created with Digital Ocean with email funcitionality
-- test cases that are variants of known attacks 
+- APIs created to connect json test cases with portal email functionality 
+- testing different spoofing headers 
 
-problems:
--unable to connect to SMTP server from client side
 
-ongoing solution:
-- generating emails API that can be called so we can intergrate script with the serer
