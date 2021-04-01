@@ -13,9 +13,9 @@ defaults={
 
 
 
-for i in range(33,500,5): #increment by 5
+for i in range(33,500,10): #increment by 10
 	attackbody={
-	"from": chr(i) + chr(i+1) + chr(i+2) + chr(i+3) + chr(i+4) + "@pujanpaudel.net",
+	"from": chr(i) + chr(i+1) + chr(i+2) + chr(i+3) + chr(i+4) + chr(i+5) + chr(i+6) + chr(i+7) + chr(i+8) + chr(i+9) + "@pujanpaudel.net",
 	"to": "EC700emailtesting@gmail.com",	
 	"subject":"This is a test subject " + str(i),
 	"message":"Just a regular message " + str(i),
