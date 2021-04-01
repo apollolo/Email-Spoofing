@@ -68,18 +68,18 @@ class MailSender(object):
 
         #Login for attacker
         auth_msg = b'AUTH PLAIN '+base64.b64encode(b'\x00'+ sender_email.encode() +b'\x00'+password.encode())+b'\r\n'
-        print(auth_msg.decode())
+        #print(auth_msg.decode())
         self.currentSocket.send(auth_msg)
         self.print_receiving_msg("Authentication", "235")
 
         #SMTP MAIL FROM
-        print(self.MAIL_FROM)
+        #print(self.MAIL_FROM)
         self.currentSocket.send(self.MAIL_FROM)
         self.print_receiving_msg("mail from", "250")
 
 
         #SMTP RCPT TO
-        print(self.RCPT_TO)
+        #print(self.RCPT_TO)
         self.currentSocket.send(self.RCPT_TO)
         self.print_receiving_msg("rcpt to", "250")
 
@@ -94,18 +94,18 @@ class MailSender(object):
             self.create_DKIM_sig()
         else:
             #Message shown to user on UI
-            print(self.from_header)
+            #print(self.from_header)
             self.currentSocket.send(self.from_header)
-            print(self.to_header)
+            #print(self.to_header)
             self.currentSocket.send(self.to_header)
-            print(self.subject_header)
+            #print(self.subject_header)
             self.currentSocket.send(self.subject_header)
         
-            print(self.body)
+            #print(self.body)
             self.currentSocket.send(self.body)
             
 
-            print(self.endmsg)
+            #print(self.endmsg)
             self.currentSocket.send(self.endmsg) 
 
         #quit command
@@ -160,6 +160,6 @@ class MailSender(object):
     #Read at most 1024 bytes from server and print out the message
     def print_receiving_msg(self, request, exp_code):
             recv = self.currentSocket.recv(1024).decode()
-            print("message after " + request + " request: " + recv)
-            if (recv[0:3] != exp_code):
-                print(exp_code + ' reply not received from server.')
+            #print("message after " + request + " request: " + recv)
+            #if (recv[0:3] != exp_code):
+                #print(exp_code + ' reply not received from server.')
