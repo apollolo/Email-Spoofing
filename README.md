@@ -47,3 +47,5 @@ DMARC is the last step of the authentication process and depends on the results 
 - comma can be use as next line feed
 - SPF and DMARC checks attacker email address, author name is shown to user
 
+-DMARC = pass even when header.d has comments inside, outlook dmarc may not be doing alignment correctly
+
