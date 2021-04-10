@@ -53,13 +53,13 @@ Out of the plethora of attack variations we tried, on sending multiple From head
 From: security@facebook.com"+<unicode>+ "(info@pujanpaudel.net) 
 where <unicode> refers to a subset of Unicode characters that are successful in breaking the user interface of the Protonmail email provider.  When inspecting the headers of the email, we found that the email passed all three of the SPF, DKIM, and DMARC protocols by checking against the attacker-controlled domain (info@pujanpaudel.net), while displaying security@facebook.com as the sender. 
   
-<div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/blob/main/pictures/Proton%20result.PNG" align="center"></a>
+<div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/blob/main/pictures/Proton%20result.png" align="center"></a>
 *Figure: Successful Spoofing attack on Protonmail.*</div>
 
 Similarly, in the case of Office 365, we discovered that when we send the From headers as 
 From: security@facebook.com"+ <unicode>+" ,<info@pujanpaudel.net>
 where <unicode> refers to a subset of Unicode characters that are successful in breaking the user interface of the Protonmail email provider. The SPF, DKIM, and DMARC protocols pass by checking the domain under our control, displaying security@facebook.com as the sender. 
- <div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/blob/main/pictures/Outlook%20result.PNG" align="center"></a>
+ <div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/blob/main/pictures/Outlook%20result.png" align="center"></a>
 *Figure: Successful Spoofing attack on Office365.*</div>
   
 We can notice that the attack payload is slightly different in the case of Protonmail, and Office 365. In the case of Office365, we are directly sending multiple From addresses while separating them with vulnerability invoking <unicode>. Whereas, in the case of Protonmail when we tried to repeat the same attack, the email was received by the Protonmail server, but it didn’t appear in the mailbox. It was probably filtered by the internal systems. Hence, a slight modification of attack payload in Protonmail creates a vulnerability, where we send effectively multiple headers on the From address, but only one address on the record by hiding the second email under the “(“ which is treated as comments under the RFC specifications of SMTP. 
@@ -68,7 +68,7 @@ message.dkim_domain("d=pujanpaudel.net);")
  We find that the DMARC results successfully pass despite the DKIM having a failure status. This shouldn’t be happening as DMARC should automatically fail when the DKIM signature fails to pass. But we discover that Office 365 allows the DMARC to pass under this scenario and the email appears under the normal mailbox. 
 
 
-<div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/blob/main/pictures/Outlook%20DMARC.PNG" align="center"></a>
+<div align="center"><a href="url"><img src="https://github.com/apollolo/Email-Spoofing/blob/main/pictures/Outlook%20DMARC.png" align="center"></a>
 *Figure: DMARC misconfiguration for Office 365.*</div>
 
 ## Lessons learned
